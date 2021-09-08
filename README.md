@@ -22,31 +22,20 @@ SO THAT I have quick access to their emails and GitHub profiles
 
 ## What's included
 
-- index.html:
-    - optimized for the accessibility needs
-
-- styles.css
-  - optimized styles
-  - comments about how they are styling respective elements groups
-  
-- script.js:
-  - working with objects
-  - optimized code using functions
-
-- Technologies/Frameworks/Resources:
-  - JQuery
-  - server-side APIs
-  - materializecss
+- Technologies/Frameworks/Resources/packages:
+  - Jest
+  - Inquirer
+  - Bootstrap
   - google fonts
 
 ## Links to Review
 
 
-* The walkthrough video that demonstrates the functionality of the application and passing tests:
+* The walkthrough video that demonstrates the functionality of the application and passing tests: https://drive.google.com/file/d/1kROGcpkTMS7xp3Q6hc3ZgCoWHihqWNMs/view
 
 * The URL of the GitHub repository: https://github.com/MaryVPie/team-profile-generator
   
-* The sample HTML file generated using your application:
+* The sample HTML file generated using the application:
 
 
 ## From developer
