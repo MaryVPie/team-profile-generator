@@ -14,7 +14,7 @@ SO THAT I have quick access to their emails and GitHub profiles
 
 ## Screenshots and mockups of the page
 
-| <img src="assets/images/pixels.jpg" width="450" height="300" alt="Generated HTML"/>| <img src="./Assets/10-object-oriented-programming-homework-demo.png" width="500" height="400" alt="Mockup"/> |
+| <img src="./Assets/Home.PNG" width="500" height="400" alt="Generated HTML"/>| <img src="./Assets/10-object-oriented-programming-homework-demo.png" width="500" height="400" alt="Mockup"/> |
 | --- | --- |
 |  Work done | Mockup |
 

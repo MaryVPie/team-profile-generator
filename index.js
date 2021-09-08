@@ -1,7 +1,5 @@
-// Imports the filesystem module, inquirer package and declares an array of licenses
-const fs = require("fs");
+const fsUtils = require("./fsUtils");
 const inquirer = require("inquirer");
-const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
@@ -11,9 +9,10 @@ let roles = ["Manager", "Engineer", "Intern"];
 let officeNumber = [1, 2, 3, 4, 5, 6];
 
 
-function initialQuestions() {
+async function initialQuestions() {
 
-    inquirer
+    try {
+        let answers = await inquirer
         .prompt([
             // User's feedback
             {
@@ -33,32 +32,32 @@ function initialQuestions() {
                 choices: roles
             },
 
-        ])
+        ]);
 
-        .then(answers => {
-            console.log(answers);
+        console.log(answers);
 
             switch (answers.role) {
                 case "Manager":
-                    questionsManager(answers);
+                    await questionsManager(answers);
                     return;
                 case "Engineer":
-                    questionsEngineer(answers);
+                    await questionsEngineer(answers);
                     return;
                 case "Intern":
-                    questionsIntern(answers);
+                    await questionsIntern(answers);
                     return;
             }
 
-            // fs.writeFile('README.md', 'content goes here', (err) =>
-
-            // err ? console.error(err) : console.log('Commit logged!'));
-
-        });
+    } catch (error) {
+        console.error(err); 
+    }
+    
 }
 
-function questionsEngineer(answers) {
-    inquirer
+async function questionsEngineer(answers) {
+
+    try {
+        let answersEngineer = await inquirer
         .prompt([
             {
                 type: "input",
@@ -71,23 +70,25 @@ function questionsEngineer(answers) {
                 name: "anotherEmployee"
 
             }
-        ])
-        .then(answersEngineer => {
-            let engineer = new Engineer(generateId(), answers.name, answers.email, answersEngineer.github);
+        ]);
+        let engineer = new Engineer(generateId(), answers.name, answers.email, answersEngineer.github);
             employees.push(engineer);
             console.log(employees);
             if (answersEngineer.anotherEmployee) {
-                initialQuestions();
+                await initialQuestions();
             }
             else {
-                writeIndexHtml();
+                await writeIndexHtml();
             }
-        })
 
+    } catch (error) {
+        console.error(err); 
+    }
 }
 
-function questionsManager(answers) {
-    inquirer
+async function questionsManager(answers) {
+    try {
+        let answersManager = await inquirer
         .prompt([
             {
                 type: "list",
@@ -101,24 +102,28 @@ function questionsManager(answers) {
                 name: "anotherEmployee"
 
             }
-        ])
-        .then(answersManager => {
-            let manager = new Manager(generateId(), answers.name, answers.email, answersManager.OfficeNumber);
+        ]);
+        let manager = new Manager(generateId(), answers.name, answers.email, answersManager.OfficeNumber);
             employees.push(manager);
             console.log(employees);
             if (answersManager.anotherEmployee) {
-                initialQuestions();
+                await initialQuestions();
             }
             else {
-                writeIndexHtml();
+                await writeIndexHtml();
             }
-        })
+
+    } catch (error) {
+        console.error(err); 
+    }
 
 }
 
 
-function questionsIntern(answers) {
-    inquirer
+async function questionsIntern(answers) {
+
+    try {
+        let answersIntern = await inquirer
         .prompt([
             {
                 type: "input",
@@ -131,19 +136,19 @@ function questionsIntern(answers) {
                 name: "anotherEmployee"
 
             }
-        ])
-        .then(answersIntern => {
-            let intern = new Intern(generateId(), answers.name, answers.email, answersIntern.School);
+        ]);
+        let intern = new Intern(generateId(), answers.name, answers.email, answersIntern.School);
             employees.push(intern);
             console.log(employees);
             if (answersIntern.anotherEmployee) {
-                initialQuestions();
+                await initialQuestions();
             }
             else {
-                writeIndexHtml();
+                await writeIndexHtml();
             }
-        })
-
+    } catch (error) {
+        console.error(err); 
+    }
 }
 
 function generateId() {
@@ -151,66 +156,63 @@ function generateId() {
     return employeesId;
 }
 
-function writeIndexHtml() {
+async function writeIndexHtml() {
     let cardsContent = '';
 
     for (let i = 0; i < employees.length; i++) {
         const employee = employees[i];
-        
-        let type = typeof employee;
-        switch (type) {
-            case typeof Engineer:
-                fs.readFile('card_template_engineer.html', (err, data) => {
-                    let filledTemplate = 
-                        data.toString()
-                            .replace("___name___",employee.getName())
-                            .replace("___id___",employee.getId())
-                            .replace("___email___",employee.getEmail())
-                            .replace("___github___",employee.getGithub());
-                    cardsContent += filledTemplate;
-                });
-                break;
-            case typeof Intern:
-                fs.readFile('card_template_intern.html', (err, data) => {
-                    let filledTemplate = 
-                        data.toString()
-                            .replace("___name___",employee.getName())
-                            .replace("___id___",employee.getId())
-                            .replace("___email___",employee.getEmail())
-                            .replace("___school___",employee.getSchool());
-                    cardsContent += filledTemplate;
-                });
-                break;
-            case typeof Manager:
-                fs.readFile('card_template_manager.html', (err, data) => {
-                    let filledTemplate = 
-                        data.toString()
-                            .replace("___name___",employee.getName())
-                            .replace("___id___",employee.getId())
-                            .replace("___email___",employee.getEmail())
-                            .replace("___officeNumber___",employee.getOfficeNumber());
-                    cardsContent += filledTemplate;
-                });
-                break;
+        console.log("employee", employee);
+
+        let filledTemplate = '';
+        if (employee instanceof Manager) {
+            filledTemplate = (await fsUtils.readFromFile('card_template_manager.html')).toString();
+                console.log(filledTemplate);
+                filledTemplate = filledTemplate
+                    .replace("___name___",employee.getName())
+                    .replace("___role___",employee.getRole())
+                    .replace("___id___",employee.getId())
+                    .replace("___email___",employee.getEmail())
+                    .replace("___officeNumber___",employee.getOfficeNumber());
+                cardsContent += filledTemplate;
+        }
+
+        if (employee instanceof Engineer) {
+            filledTemplate = (await fsUtils.readFromFile('card_template_engineer.html')).toString();
+                console.log(filledTemplate);
+                filledTemplate = filledTemplate
+                    .replace("___name___",employee.getName())
+                    .replace("___role___",employee.getRole())
+                    .replace("___id___",employee.getId())
+                    .replace("___email___",employee.getEmail())
+                    .replace("___github___",employee.getGithub());
+                
+                cardsContent += filledTemplate;
+        }
+
+        if (employee instanceof Intern) {
+            filledTemplate = (await fsUtils.readFromFile('card_template_intern.html')).toString();
+                console.log(filledTemplate);
+                filledTemplate = filledTemplate
+                    .replace("___name___",employee.getName())
+                    .replace("___role___",employee.getRole())
+                    .replace("___id___",employee.getId())
+                    .replace("___email___",employee.getEmail())
+                    .replace("___school___",employee.getSchool());
+                cardsContent += filledTemplate;
         }
     } 
-    fs.readFile('index_template.html', (err, data) =>
-        {
-            let filledTemplate = data.toString().replace("___cards___", cardsContent); 
-            fs.writeFile("index.html", filledTemplate, (err)=> {
-                if (err) {
-                   console.error(err); 
-                } else{
-                    console.log("successfully created");
-                }
-            });
-        }
+    let indexTemplate = (await fsUtils.readFromFile('index_template.html')).toString();
 
-    );
+    indexTemplate = indexTemplate.replace("___cards___", cardsContent); 
 
-    
+    try {
+        await fsUtils.writeToFile("index.html", indexTemplate);
+        console.log("successfully created");
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 
 
-initialQuestions();
+initialQuestions().then(()=> "exiting with 0");
