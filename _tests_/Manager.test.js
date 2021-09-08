@@ -31,7 +31,7 @@ describe("ManagerTests", () => {
     });
     describe("getRole", () => {
         it("should return an Manager's role", () => {
-            const emp = new Manager(1, "Mary", "someemail@gmail.com", "Manager");
+            const emp = new Manager(1, "Mary", "someemail@gmail.com");
             const role = emp.getRole();
 
             expect(role).toEqual("Manager");

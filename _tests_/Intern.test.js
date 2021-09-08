@@ -31,7 +31,7 @@ describe("InternTests", () => {
     });
     describe("getRole", () => {
         it("should return an Intern's role", () => {
-            const emp = new Intern(1, "Mary", "someemail@gmail.com", "Intern");
+            const emp = new Intern(1, "Mary", "someemail@gmail.com");
             const role = emp.getRole();
 
             expect(role).toEqual("Intern");
