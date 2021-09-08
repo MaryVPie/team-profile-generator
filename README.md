@@ -35,7 +35,7 @@ SO THAT I have quick access to their emails and GitHub profiles
 
 * The URL of the GitHub repository: https://github.com/MaryVPie/team-profile-generator
   
-* The sample HTML file generated using the application:
+* The sample HTML file generated using the application: https://github.com/MaryVPie/team-profile-generator/tree/main/Sample
 
 
 ## From developer
